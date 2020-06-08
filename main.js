@@ -5,10 +5,20 @@ var template = require('./lib/template');
 var db = require('./lib/db');
 var topic = require('./lib/topic');
 var author = require('./lib/author');
+var bodyParser = require('body-parser');
+var compression = require('compression');
 
 const express = require('express')
 const app = express()
 const port = 3000
+
+// 미들웨어가 들어온다.body parser가 만들어내는 미들웨어가 들어옴
+// 사용자가 전송한 post 데이터를 내부적으로 분석
+app.use(bodyParser.urlencoded({ extended: false }));
+// 데이터 용량을 압축해준다.
+app.use(compression());
+// 정적인 파일 서비스. /image/hello.jpg 처럼 url로서 접근 가능해진다
+app.use(express.static('public'));
 
 // Route, Routing.
 // 사용자들이 여러개의 path를 통해 들어올 때 path마다 적절한 응답을 해주는 느낌..
@@ -42,6 +52,23 @@ app.post('/update_process', function(request, response){
 app.post('/delete_process', function(request, response){
   topic.delete_process(request, response);
 })
+
+// 미들웨어는 순차적으로 실행 되기 때문에, 찾은 것이 없을 때 404 status 를 보내줌.
+// 찾을 수 없습니다.
+app.use(function(req, res, next) {
+  res.status(404).send('Sorry cant find that!');
+});
+
+// express의 error handler
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 // application객체의 listen method가 실행되면 비로소 웹 서버가 실행되며, 3000번 포트로 문을 열어줌
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
