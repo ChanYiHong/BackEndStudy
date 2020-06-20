@@ -20,6 +20,10 @@ app.use(compression());
 // 정적인 파일 서비스. /image/hello.jpg 처럼 url로서 접근 가능해진다
 app.use(express.static('public'));
 
+// main.js를 깔끔하게 하기 위해, Router기능을 사용.
+// /topic으로 오는 모든 url을 topicRouter에 보내준다.
+app.use('/topic', topicRouter);
+
 // Route, Routing.
 // 사용자들이 여러개의 path를 통해 들어올 때 path마다 적절한 응답을 해주는 느낌..
 //app.get('/', (req, res) => res.send('Hello World!'))
