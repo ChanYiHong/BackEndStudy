@@ -68,4 +68,59 @@ public class Order {
         delivery.setOrder(this);
     }
 
+
+    // == 생성 메서드 == //
+    /**
+     * 주문 생성이 복잡함. oederItem, delivery.. 복잡해짐
+     * 별도의 생성 메서드가 있으면 좋다.
+     * 이렇게 만들어 두면 생성하는 지점을 변경할 때 이 method만 바꾸면 됨
+     */
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){ // ... 문법으로 여러개 넘기기?
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for(OrderItem orderItem : orderItems){
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+
+    // == 비즈니스 로직 == //
+
+    /**
+     *
+     * 주문 취소
+     */
+    public void cancel() {
+        // delivery의 상태가 배송완료면.
+        if(delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+        this.setStatus(OrderStatus.CANCEL);
+        // OrderItem도 주문을 취소 시켜야 함.
+        // 주문 하나당 order가 여러개 였을 수 있으니, 주문 각각에다가 cancel을 날려주는 거에요.
+        for(OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    // == 조회 로직 == //
+    // 계산이 필요할 때가 있음
+
+    /**
+     *
+     * 전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : this.orderItems){
+            // 주문 수량 x 가격.
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
 }
