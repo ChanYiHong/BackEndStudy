@@ -1,13 +1,19 @@
 package jpabook.jpashop.domain;
 
 import jpabook.jpashop.domain.item.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+// 이게 왜쓰냐면, 다른 package의 class에서 OrderItem temp = new OrderItem()을 못하게 막는 것. 유지보수가 어려워지기때문
+// 비즈니스 로직은 되도록 응집도 있게 !!, 여기서는 createOrderItem을 사용
+// 항상 코드를 제약하는 상태로 짜세요. 좋은 유지보수 가능.
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
     @Id @GeneratedValue
