@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,5 +51,18 @@ public class MemberController {
         memberService.join(member);
 
         return "redirect:/";
+    }
+
+
+    @GetMapping("/members")
+    public String list(Model model){
+        // 원래 Member 객체를 Member detour나 화면에맞는 데이터 트랜스폼 오브젝트로 바꿔서 필요한 정보만 모델에 담아서 넘겨야 함
+        // API를 만들 때는 "절대" entity를 웹으로 반환하면 안됨!! 중요
+        // (이 예제는 아주 간단한 예제라 이렇게 했음.. )
+        List<Member> members = memberService.findMembers();
+        // key : "members"  value : members 객체
+        model.addAttribute("members", members);
+        // model에 담아서 화면에 넘긴다.
+        return "members/memberList";
     }
 }

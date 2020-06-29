@@ -16,3 +16,10 @@ public class MemberForm {
     private String zipcode;
 
 }
+
+/**
+ *
+ * 엔티티말고 따로 이렇게 Form 객체를 만들어서
+ * 엔티티는 단순하게 유지하는 것이 좋다!
+ *
+ */

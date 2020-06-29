@@ -13,7 +13,7 @@ public class MemberRepository {
 
     // JPA의 EntityManager를 Spring을 주입해줌
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
     // 멤버 등록
     // 영속성 context에 일단 member entity를 넣죠
