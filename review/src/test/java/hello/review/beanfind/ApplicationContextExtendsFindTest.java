@@ -1,0 +1,60 @@
+package hello.review.beanfind;
+
+import hello.review.AppConfig;
+import hello.review.discount.DiscountPolicy;
+import hello.review.discount.FixDiscountPolicy;
+import hello.review.discount.RateDiscountPolicy;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class ApplicationContextExtendsFindTest {
+
+    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(TestConfig.class);
+
+    @Test
+    @DisplayName("부모 타입으로 조회시 자식이 둘 이상 있으면 중복 오류가 발생한다.")
+    public void findBeanByParentTypeDuplicate() throws Exception {
+
+        assertThrows(NoUniqueBeanDefinitionException.class,
+                () -> ac.getBean(DiscountPolicy.class));
+
+    }
+
+    @Test
+    @DisplayName("부모 타입으로 조회시 자식이 둘 이상 있으면 빈 이름을 지정하면 된다.")
+    public void findBeanByParentTypeBeanName() throws Exception {
+
+        DiscountPolicy rateDiscountPolicy = ac.getBean("rateDiscountPolicy", DiscountPolicy.class);
+        assertThat(rateDiscountPolicy).isInstanceOf(RateDiscountPolicy.class);
+    }
+
+
+    @Test
+    @DisplayName("특정 하위 타입으로 조회. 사실은 구현체에 의존하기 때문에 안좋은 방법이긴 함..")
+    public void findBeanBySubType() throws Exception {
+
+        DiscountPolicy rateDiscountPolicy = ac.getBean(RateDiscountPolicy.class);
+        assertThat(rateDiscountPolicy).isInstanceOf(RateDiscountPolicy.class);
+    }
+
+    @Configuration
+    static class TestConfig {
+        @Bean
+        public DiscountPolicy rateDiscountPolicy(){
+            return new RateDiscountPolicy();
+        }
+
+        @Bean
+        public DiscountPolicy fixDiscountPolicy(){
+            return new FixDiscountPolicy();
+        }
+    }
+
+}
