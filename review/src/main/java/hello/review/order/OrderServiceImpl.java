@@ -27,4 +27,9 @@ public class OrderServiceImpl implements OrderService{
         // Order를 반환.
         return new Order(memberId, itemName, itemPrice, discountPrice);
     }
+
+    // @Configuration 테스트 용도.
+    public MemberRepository getMemberRepository(){
+        return this.memberRepository;
+    }
 }
