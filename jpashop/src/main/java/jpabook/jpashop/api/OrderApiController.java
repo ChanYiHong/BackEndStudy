@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderFlatDto;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.AllArgsConstructor;
@@ -82,6 +83,20 @@ public class OrderApiController {
     @GetMapping("/api/v4/orders")
     public Result ordersV4(){
         List<OrderQueryDto> orders = orderQueryRepository.findOrderQueryDtos();
+        return new Result(orders);
+    }
+
+
+    @GetMapping("/api/v5/orders")
+    public Result ordersV5(){
+        List<OrderQueryDto> orders = orderQueryRepository.findAllByDto_optimization();
+        return new Result(orders);
+    }
+
+
+    @GetMapping("/api/v6/orders")
+    public Result ordersV6(){
+        List<OrderFlatDto> orders = orderQueryRepository.findAllByDto_flat();
         return new Result(orders);
     }
 
