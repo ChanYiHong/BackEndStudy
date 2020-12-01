@@ -275,12 +275,69 @@ class MemberRepositoryTest {
             System.out.println(member.getTeam().getName());
         }
 
-        List<Member> memberFetches = memberRepository.findMemberFetchJoin();
+        List<Member> memberFetches = memberRepository.findEntityGraphByUsername("member1");
 
         for (Member member : memberFetches) {
             System.out.println(member.getUsername());
             System.out.println(member.getTeam().getName());
         }
+
+    }
+
+
+    @Test
+    public void queryHint() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findReadOnlyByUsername(member1.getUsername());
+        findMember.setUsername("username2");
+
+        em.flush(); // 변경 감지. 데이터 베이스에 업데이트 쿼리가 나감.
+
+
+    }
+
+
+    @Test
+    public void lock() {
+        // given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+
+        // when
+        List<Member> result = memberRepository.findLockByUsername("member1");
+    }
+
+    @Test
+    public void callCustom(){
+        List<Member> member = memberRepository.findMemberCustom();
+    }
+
+    @Test
+    public void JpaEventBaseEntity() throws InterruptedException {
+        // given
+        Member member = new Member("member1");
+        memberRepository.save(member); // PrePersist
+
+        Thread.sleep(100);
+        member.setUsername("member2");
+
+        em.flush(); //@PreUpdate
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        // then
+        System.out.println("findMember.createdDate = " + findMember.getCreatedDate());
+        System.out.println("findMember.updatedDate = " + findMember.getLastModifiedDate());
 
     }
 }
