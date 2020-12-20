@@ -13,6 +13,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -813,10 +814,30 @@ public class QuerydslBasicTest {
 
         // member라는 단어를 M으로 바꿔서 조회.
         List<String> result = queryFactory
-                .select(Expressions.stringTemplate("function('replace', {0}, {1}, {2}",
+                .select(Expressions.stringTemplate("function('replace', {0}, {1}, {2})",
                         member.username, "member", "M"))
                 .from(member)
                 .fetch();
+
+        for (String s : result) {
+            System.out.println(s);
+        }
+
     }
 
+
+    @Test
+    public void sqlFunction2() {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                //.where(member.username.eq(
+                        //Expressions.stringTemplate("function('lower', {0})", member.username)))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        for (String s : result) {
+            System.out.println(s);
+        }
+    }
 }
