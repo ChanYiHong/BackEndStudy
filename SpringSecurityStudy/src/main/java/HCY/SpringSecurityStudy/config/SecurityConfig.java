@@ -18,15 +18,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        // 사용자 계정 : user1
-        auth.inMemoryAuthentication().withUser("user1")
-        // 1111 패스워드 인코딩 결과
-        .password("$2a$10$Rb/MB.f4K7btEgH73k8aj.MZc20y5Fsq1AhTU.1aDi1n3jXH8LNMS")
-                .roles("USER");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+//        // 사용자 계정 : user1
+//        auth.inMemoryAuthentication().withUser("user1")
+//        // 1111 패스워드 인코딩 결과
+//        .password("$2a$10$Rb/MB.f4K7btEgH73k8aj.MZc20y5Fsq1AhTU.1aDi1n3jXH8LNMS")
+//                .roles("USER");
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
