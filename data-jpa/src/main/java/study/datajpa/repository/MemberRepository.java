@@ -16,7 +16,8 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
-    List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
+    @Query("select m from Member m left join fetch m.team")
+    List<Member> findMemberFetchJoin();
 
     @Query("select m from Member m where m.username = :username and m.age = :age")
     List<Member> findUser(@Param("username") String username, @Param("age") int age);
@@ -24,29 +25,28 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @Query("select m.username from Member m")
     List<String> findUsernameList();
 
+    List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
+
     @Query("select new study.datajpa.dto.MemberDto(m.id, m.username, t.name) from Member m join m.team t")
     List<MemberDto> findMemberDto();
 
     @Query("select m from Member m where m.username in :names")
     List<Member> findByNames(@Param("names") Collection<String> names);
 
-
     List<Member> findListByUsername(String username); //컬렉션
     Member findMemberByUsername(String username); // 단건
-    Optional<Member> findOptionalByUsername(String username); // 단건 Optional
 
+    Optional<Member> findOptionalByUsername(String username); // 단건 Optional
     @Query(value = "select m from Member m left join m.team t",
     countQuery = "select count(m) from Member m")
     Page<Member> findByAge(int age, Pageable pageable);
-    //Slice<Member> findByAge(int age, Pageable pageable);
 
+    //Slice<Member> findByAge(int age, Pageable pageable);
     // Modifying을 꼭 넣어주자. 변경된 개수 int로 반환시키게 됨.
+
     @Modifying(clearAutomatically = true)
     @Query("update Member m set m.age = m.age + 1 where m.age >= :age")
     int bulkAgePlus(@Param("age") int age);
-
-    @Query("select m from Member m left join fetch m.team")
-    List<Member> findMemberFetchJoin();
 
     @Override
     @EntityGraph(attributePaths = {"team"})
