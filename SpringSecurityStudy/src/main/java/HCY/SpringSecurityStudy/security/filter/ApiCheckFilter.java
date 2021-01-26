@@ -1,5 +1,6 @@
 package HCY.SpringSecurityStudy.security.filter;
 
+import HCY.SpringSecurityStudy.security.util.JWTUtil;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
 import org.springframework.util.AntPathMatcher;
@@ -19,10 +20,12 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     // 토큰 기반 필터 이므로 /notes/.. 에만 동작하도록 AntPathMatcher 사용.
     private AntPathMatcher antPathMatcher;
     private String pattern;
+    private JWTUtil jwtUtil;
 
-    public ApiCheckFilter(String pattern) {
+    public ApiCheckFilter(String pattern, JWTUtil jwtUtil) {
         this.antPathMatcher = new AntPathMatcher();
         this.pattern = pattern;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -66,15 +69,15 @@ public class ApiCheckFilter extends OncePerRequestFilter {
     private boolean checkAuthHeader(HttpServletRequest request) {
         boolean checkResult = false;
 
-        log.info("+++++++++++++++");
-        log.info(request);
-        log.info("+++++++++++++++");
-
         String authHeader = request.getHeader("Authorization");
-        if(StringUtils.hasText(authHeader)) {
+        if(StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             log.info("Authorization exist: " + authHeader);
-            if(authHeader.equals("12345678")){
-                checkResult = true;
+            try {
+                String email = jwtUtil.validateAndExtract(authHeader.substring(7));
+                log.info("validate result: " + email);
+                checkResult = email.length() > 0;
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
 
