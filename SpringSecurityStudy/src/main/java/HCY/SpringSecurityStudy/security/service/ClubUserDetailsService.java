@@ -1,6 +1,6 @@
-package HCY.SpringSecurityStudy.service;
+package HCY.SpringSecurityStudy.security.service;
 
-import HCY.SpringSecurityStudy.dto.ClubAuthMemberDTO;
+import HCY.SpringSecurityStudy.security.dto.ClubAuthMemberDTO;
 import HCY.SpringSecurityStudy.entity.ClubMember;
 import HCY.SpringSecurityStudy.repository.ClubMemberRepository;
 import lombok.RequiredArgsConstructor;

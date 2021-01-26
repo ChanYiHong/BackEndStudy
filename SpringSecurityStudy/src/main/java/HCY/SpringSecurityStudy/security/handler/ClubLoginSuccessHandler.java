@@ -1,6 +1,6 @@
-package HCY.SpringSecurityStudy.handler;
+package HCY.SpringSecurityStudy.security.handler;
 
-import HCY.SpringSecurityStudy.dto.ClubAuthMemberDTO;
+import HCY.SpringSecurityStudy.security.dto.ClubAuthMemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;

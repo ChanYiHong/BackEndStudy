@@ -32,7 +32,7 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public NoteDTO get(Long id) {
         log.info("Find One Note : " + id);
-        Optional<Note> result = noteRepository.findById(id);
+        Optional<Note> result = noteRepository.getNoteWithWriter(id);
         return result.map(this::entityToDTO).orElse(null);
     }
 

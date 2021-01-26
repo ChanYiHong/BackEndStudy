@@ -1,7 +1,6 @@
 package HCY.SpringSecurityStudy.controller;
 
-import HCY.SpringSecurityStudy.dto.ClubAuthMemberDTO;
-import lombok.Getter;
+import HCY.SpringSecurityStudy.security.dto.ClubAuthMemberDTO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

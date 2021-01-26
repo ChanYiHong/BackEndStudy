@@ -1,4 +1,4 @@
-package HCY.SpringSecurityStudy.dto;
+package HCY.SpringSecurityStudy.security.dto;
 
 
 import lombok.Getter;

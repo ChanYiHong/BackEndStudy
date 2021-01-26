@@ -1,17 +1,20 @@
 package HCY.SpringSecurityStudy.config;
 
-import HCY.SpringSecurityStudy.handler.ClubLoginSuccessHandler;
-import HCY.SpringSecurityStudy.service.ClubUserDetailsService;
+import HCY.SpringSecurityStudy.security.filter.ApiCheckFilter;
+import HCY.SpringSecurityStudy.security.filter.ApiLoginFilter;
+import HCY.SpringSecurityStudy.security.handler.ApiLoginFailHandler;
+import HCY.SpringSecurityStudy.security.handler.ClubLoginSuccessHandler;
+import HCY.SpringSecurityStudy.security.service.ClubUserDetailsService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @Log4j2
@@ -45,13 +48,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin();
         http.csrf().disable(); //csrf 토큰 미발행.
+        http.logout();
 
         http.oauth2Login().successHandler(successHandler());
         http.rememberMe().tokenValiditySeconds(60 * 60 * 24 * 7).userDetailsService(clubUserDetailsService);
+
+        // apiCheckFilter가 UsernamePasswordAuthenticationFilter보다 먼저 나오게 조정..
+        http.addFilterBefore(apiCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(apiLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     public ClubLoginSuccessHandler successHandler() {
         return new ClubLoginSuccessHandler(passwordEncoder());
+    }
+
+    @Bean
+    public ApiCheckFilter apiCheckFilter() {
+        return new ApiCheckFilter("/notes/**/*");
+    }
+
+    @Bean
+    public ApiLoginFilter apiLoginFilter() throws Exception {
+        ApiLoginFilter apiLoginFilter = new ApiLoginFilter("/api/login");
+        apiLoginFilter.setAuthenticationManager(authenticationManager());
+        apiLoginFilter.setAuthenticationFailureHandler(new ApiLoginFailHandler());
+        return apiLoginFilter;
     }
 }
