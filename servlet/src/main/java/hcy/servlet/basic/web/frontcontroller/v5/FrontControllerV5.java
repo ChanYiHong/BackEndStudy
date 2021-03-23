@@ -5,7 +5,11 @@ import hcy.servlet.basic.web.frontcontroller.MyView;
 import hcy.servlet.basic.web.frontcontroller.v3.controller.MemberFormControllerV3;
 import hcy.servlet.basic.web.frontcontroller.v3.controller.MemberListControllerV3;
 import hcy.servlet.basic.web.frontcontroller.v3.controller.MemberSaveControllerV3;
+import hcy.servlet.basic.web.frontcontroller.v4.controller.MemberFormControllerV4;
+import hcy.servlet.basic.web.frontcontroller.v4.controller.MemberListControllerV4;
+import hcy.servlet.basic.web.frontcontroller.v4.controller.MemberSaveControllerV4;
 import hcy.servlet.basic.web.frontcontroller.v5.adapter.ControllerV3HandlerAdapter;
+import hcy.servlet.basic.web.frontcontroller.v5.adapter.ControllerV4HandlerAdapter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,14 +37,19 @@ public class FrontControllerV5 extends HttpServlet {
         handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
+        handlerMappingMap.put("/front-controller/v5/v4/members/new-form", new MemberFormControllerV4());
+        handlerMappingMap.put("/front-controller/v5/v4/members/save", new MemberSaveControllerV4());
+        handlerMappingMap.put("/front-controller/v5/v4/members", new MemberListControllerV4());
     }
 
     private void initHandlerAdapters() {
         handlerAdapters.add(new ControllerV3HandlerAdapter());
+        handlerAdapters.add(new ControllerV4HandlerAdapter());
     }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //MemberFormControllerV3
         Object handler = getHandler(request);
         if(handler == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -59,6 +68,7 @@ public class FrontControllerV5 extends HttpServlet {
 
     private MyHandlerAdapter getHandlerAdapter(Object handler) {
         for (MyHandlerAdapter adapter : handlerAdapters) {
+            // ControllerV3의 instance 인 MemberFormControllerV3
             if(adapter.supports(handler)) {
                 return adapter;
             }
