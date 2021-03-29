@@ -108,4 +108,13 @@ public class RequestParamController {
         return "ok";
     }
 
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) { // @ModelAttribute 생략 가능..
+
+        log.info("helloData = {}", helloData);
+
+        return "ok";
+    }
+
 }
