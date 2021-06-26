@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 자바스크립트 인라인 사용 전 -->
+<script>
+    var username = [[${user.username}]];
+    var age = [[${user.age}]];
+
+    var username2 = /*[[${user.username}]]*/ "test username";
+
+    var user = [[${user}]];
+</script>
+<!-- 자바스크립트 인라인 사용 후 -->
+<script th:inline="javascript">
+    var username = [[${user.username}]];
+    var age = [[${user.age}]];
+
+    var username2 = /*[[${user.username}]]*/ "test username";
+
+    var user = [[${user}]]; // 객체를 Json으로 렌더링 해서 넣어줌! 편리함.
+</script>
+
+<script th:inline="javascript">
+    [# th:each="user, stat : ${users}"]
+    var user[[${stat.count}]] = [[${user}]];
+    [/]
+</script>
+</body>
+</html>

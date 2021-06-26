@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>부분 포함</h1>
+<!--물결 표시가 조각 문법.-->
+<h2>부분 포함 insert</h2>
+<!--div tag안에 copy를 가져온 footer 태그가 들어-->
+<div th:insert="~{template/fragment/footer :: copy}"></div>
+
+<h2>부분 포함 repalce</h2>감
+<!--div 태그가 footer 태그로 교체. (div 태그는 사라짐)-->
+<div th:replace="~{template/fragment/footer :: copy}"></div>
+
+<h2>부분 포함 단순 표현식</h2>
+<!--복잡해 지면 못씀..-->
+<div th:replace="template/fragment/footer :: copy"></div>
+
+
+<h1>파라미터 사용</h1>
+<div th:replace="~{template/fragment/footer :: copyParam ('데이터1', '데이터2')}"></div>
+
+</body>
+</html>

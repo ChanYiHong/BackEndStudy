@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--~{::title} 이렇게 하면 여기서 추가로 따로 쓰고 싶은 title 태그 자체를 넣어버림 파라미터로. -->
+<head th:replace="~{template/layout/base :: common_header(~{::title}, ~{::link})}">
+    <title>메인 타이틀</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/themes/smoothness/jquery-ui.css}">
+</head>
+<body>
+메인 컨텐츠
+</body>
+</html>
