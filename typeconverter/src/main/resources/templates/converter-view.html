@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+<!--    괄호 1개면 Converter 사용 x-->
+    <li>"${number}": <span th:text="${number}"></span></li>
+<!--    괄호가 2개면 Converter 사용 O-->
+    <li>"${{number}}":<span th:text="${{number}}"></span></li>
+<!--    객체를 그냥 출력해서 .toString 호출... hello.typeconverter.type.IpPort@59cb0946 이런식으로 나와버림.-->
+    <li>${ipPort}: <span th:text="${ipPort}"></span></li>
+<!--    Converter가 동작해서 127.0.0.1:8080 이라고 문자로 이쁘게 나옴.-->
+    <li>${{ipPort}}: <span th:text="${{ipPort}}"></span></li>
+</ul>
+
+</body>
+</html>
