@@ -2,15 +2,18 @@ package hcy.aop;
 
 import hcy.aop.order.OrderRepository;
 import hcy.aop.order.OrderService;
+import hcy.aop.order.aop.*;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 @Slf4j
 @SpringBootTest
+@Import(AspectV6Advice.class)
 public class AopTest {
 
     @Autowired
